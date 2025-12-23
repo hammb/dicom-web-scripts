@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import sys
 
 import SimpleITK as sitk
 import zarr
@@ -84,11 +85,27 @@ def dicom_to_zarr(series_dir):
     z = zarr.open(
         zarr_path,
         mode="w",
-        zarr_format=2,
+        zarr_format=3,
         shape=arr.shape,
         chunks=chunks,
         dtype=arr.dtype,
-        compressor=Blosc(cname="zstd", clevel=1, shuffle=Blosc.BITSHUFFLE),
+        codecs=[
+            {
+                "name": "bytes",
+                "configuration": {
+                    "endian": "little" if sys.byteorder == "little" else "big"
+                },
+            },
+            {
+                "name": "blosc",
+                "configuration": {
+                    "cname": "zstd",
+                    "clevel": 1,
+                    "shuffle": "bitshuffle",
+                    "typesize": arr.itemsize,
+                },
+            },
+        ],
     )
     z[:] = arr
 
