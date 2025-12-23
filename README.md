@@ -16,7 +16,14 @@ This project provides a Python script to convert DICOM series into Zarr arrays (
 ## Installation
 
 1. Clone the repository (if applicable) or download the script.
-2. Install the required dependencies:
+2. Create and activate a Conda environment (optional but recommended):
+
+   ```bash
+   conda create -n dicom-web-scripts python=3.11
+   conda activate dicom-web-scripts
+   ```
+
+3. Install the required dependencies:
 
    ```bash
    pip install -r requirements.txt
